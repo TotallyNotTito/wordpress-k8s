@@ -111,3 +111,14 @@ From the WordPress-Site/wp-admin page, install Redis Object Cache. Once installe
 I have included some simple scripts to benchmark the application to test with cache enabled compared with site performance with cahce not enabled. This should run with approximately ~250 rps comfortably on a single node. You'll need to install the k6 binary.
 
 run `k6 run <benchmark-name>.js`
+
+## Running Datadog Observability Agent on Cluster
+```
+ helm repo add datadog https://helm.datadoghq.com
+ helm install wp-datadog -f datadog-values.yaml --set datadog.apiKey='<api-key>' datadog/datadog
+ helm upgrade -f datadog-values.yaml wp-datadog datadog/datadog
+ helm upgrade -f datadog-values.yaml wp-datadog datadog/datadog
+ datadog-agent status
+```
+
+This will allow you to have observability of Kubernetes cluster.
