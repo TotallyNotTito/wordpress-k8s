@@ -1,0 +1,46 @@
+# Datadog Agent with Logs, APM, Processes, and System Probe enabled
+# with specific configuration to work on AKS.
+
+targetSystem: "linux"
+datadog:
+  confd: 
+    redisdb.yaml: |- 
+      ad_identifiers:
+        - redis
+      init_config:
+      instances:
+        - host: %%host%%
+          port: 6379
+          password: secretpassword
+  apiKey: bc17382d4811fd3bb1a01261d7e53afe
+  # appKey: <DATADOG_APP_KEY>
+  # If not using secrets, then use apiKey and appKey instead
+  #apiKeyExistingSecret: 
+  #appKeyExistingSecret: 
+  clusterName: aks-cluster-demo
+  tags: [env: "development"]
+  kubelet:
+    host:
+      valueFrom:
+        fieldRef:
+          fieldPath: spec.nodeName
+    hostCAPath: /etc/kubernetes/certs/kubeletserver.crt
+    tlsVerify: false # Required as of Agent 7.35 because Kubelet certificates in AKS do not have a Subject Alternative Name (SAN) set.
+  logs:
+    enabled: true
+    containerCollectAll: true
+    containerCollectUsingFiles: true
+  apm:
+    portEnabled: true
+    socketPath: /var/run/datadog/apm.socket
+    hostSocketPath: /var/run/datadog/
+  processAgent:
+    enabled: true
+    processCollection: false
+  systemProbe:
+    enableTCPQueueLength: false
+    enableOOMKill: true
+    collectDNSStats: false
+providers:
+    aks:
+      enabled: true

@@ -1,0 +1,32 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: wordpress-pvc-7
+provisioner: file.csi.azure.com
+reclaimPolicy: Retain
+volumeBindingMode: Immediate
+allowVolumeExpansion: true
+mountOptions:
+  - dir_mode=0640
+  - file_mode=0640
+  - uid=0
+  - gid=0
+  - mfsymlinks
+  - cache=strict # https://linux.die.net/man/8/mount.cifs
+  - nosharesock
+parameters:
+  skuName: Standard_LRS
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wordpress-pvc-7
+spec: 
+  accessModes:
+    - ReadWriteMany
+      #storageClassName: azurefile-csi
+  storageClassName: wordpress-pvc-7
+  resources:
+    requests:
+      storage: 10Gi 
