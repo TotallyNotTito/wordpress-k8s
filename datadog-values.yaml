@@ -12,7 +12,7 @@ datadog:
         - host: %%host%%
           port: 6379
           password: secretpassword
-  apiKey: bc17382d4811fd3bb1a01261d7e53afe
+  apiKey: <api-key>
   # appKey: <DATADOG_APP_KEY>
   # If not using secrets, then use apiKey and appKey instead
   #apiKeyExistingSecret: 
